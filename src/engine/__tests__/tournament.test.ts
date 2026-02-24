@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { runTournament, computeStandings, runTournamentFull } from "../tournament";
+import { runTournament, runTournamentFull } from "../tournament";
 import { alwaysCooperate, alwaysDefect, titForTat, builtInStrategies } from "../strategies";
 
 describe("runTournament", () => {
