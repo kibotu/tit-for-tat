@@ -53,17 +53,42 @@ It won because it is:
 
 ## Challenger Strategies
 
-Strategies that can outperform Tit for Tat under certain conditions. Each folder
-contains a README with explanation, pros/cons, and a **copy-paste ready** strategy
-for the simulation editor.
+Each folder contains a README with explanation, pros/cons, simulation data, and a
+**copy-paste ready** `function play(...)` for the strategy editor.
 
-| Strategy | Type | Folder |
-| --- | --- | --- |
-| **Generous Tit for Tat** | Noise-resistant TFT variant | [`strategies/generous-tit-for-tat`](strategies/generous-tit-for-tat) |
-| **Gradual** | Proportional punishment | [`strategies/gradual`](strategies/gradual) |
-| **Suspicious Tit for Tat** | Pessimistic TFT variant | [`strategies/suspicious-tit-for-tat`](strategies/suspicious-tit-for-tat) |
-| **Hard Majority** | Trend-based (pessimistic) | [`strategies/hard-majority`](strategies/hard-majority) |
-| **Soft Majority** | Trend-based (optimistic) | [`strategies/soft-majority`](strategies/soft-majority) |
-| **Adaptive** | Probe then commit | [`strategies/adaptive`](strategies/adaptive) |
-| **Prober** | Test and exploit | [`strategies/prober`](strategies/prober) |
-| **Detective** | Classify then counter | [`strategies/detective`](strategies/detective) |
+### The winner
+
+| Strategy | Beats Grudger? | Approach | Folder |
+| --- | --- | --- | --- |
+| **Endgame Grudger** | **Yes** | Grudger + defect last 2 rounds | [`strategies/endgame-grudger`](strategies/endgame-grudger) |
+
+Exploits the known round count (200). Plays as a perfect Grudger for 198 rounds, then
+defects on rounds 198–199 when opponents can't fully retaliate. Gains +2 to +4 points
+per cooperative matchup, winning the tournament consistently.
+
+### Other strategies (none beat the built-in top 3)
+
+| Strategy | Type | Why it loses | Folder |
+| --- | --- | --- | --- |
+| **Generous Tit for Tat** | Noise-resistant TFT | No noise in this tournament | [`strategies/generous-tit-for-tat`](strategies/generous-tit-for-tat) |
+| **Gradual** | Proportional punishment | No advantage over Grudger here | [`strategies/gradual`](strategies/gradual) |
+| **Suspicious Tit for Tat** | Pessimistic TFT | Opening D triggers Grudger | [`strategies/suspicious-tit-for-tat`](strategies/suspicious-tit-for-tat) |
+| **Hard Majority** | Trend-based (pessimistic) | Opening D triggers Grudger | [`strategies/hard-majority`](strategies/hard-majority) |
+| **Soft Majority** | Trend-based (optimistic) | Too slow to punish | [`strategies/soft-majority`](strategies/soft-majority) |
+| **Adaptive** | Probe then commit | Probe triggers Grudger | [`strategies/adaptive`](strategies/adaptive) |
+| **Prober** | Test and exploit | Probe triggers Grudger | [`strategies/prober`](strategies/prober) |
+| **Detective** | Classify then counter | Probe triggers Grudger | [`strategies/detective`](strategies/detective) |
+
+### Why most strategies fail
+
+In this specific tournament (200 rounds, no noise, this opponent pool), **Grudger is
+king** because:
+
+1. It scores 600 (maximum mutual cooperation) against 4 of 6 opponents.
+2. It punishes defectors permanently, extracting ~200 against Always Defect and ~600
+   against Random.
+3. Any strategy that defects first — even once — triggers Grudger's permanent
+   retaliation, losing ~400 points in that matchup alone.
+
+The **only** exploit is the known round count: defect at the very end when opponents
+can't retaliate.
