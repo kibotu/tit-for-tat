@@ -1,5 +1,7 @@
 # Tit for Tat — Iterated Prisoner's Dilemma Tournament
 
+> **[Try the early simulation live on GitHub Pages](https://kibotu.github.io/tit-for-tat/)**
+
 Based on Robert Axelrod's tournament, as featured in the Veritasium video
 *"This game theory problem will change the way you see the world"* and described in
 *"The Evolution of Cooperation"* and *"A Passion for Cooperation: Adventures of a Wide-Ranging Scientist"*.
@@ -104,3 +106,56 @@ king** because:
 
 The **only** exploit is the known round count: defect at the very end when opponents
 can't retaliate.
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 22+
+- npm (comes with Node.js)
+
+### Quick Start
+
+```bash
+./run.sh
+```
+
+This installs dependencies, runs tests, builds the project, and opens a local preview.
+
+### Manual Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Start development server with hot reload
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+### Available Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start Vite dev server with hot reload |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build locally |
+| `npm test` | Run tests once |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run lint` | Lint with ESLint |
+
+### Deployment
+
+Pushes to `main` automatically deploy to GitHub Pages via the included workflow.
+
+### Tech Stack
+
+React 19 · TypeScript · Vite · Tailwind CSS · Zustand · Radix UI · CodeMirror · Recharts
