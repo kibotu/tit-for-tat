@@ -7,9 +7,15 @@ export interface TournamentStep {
   match: MatchResult;
 }
 
+function randomRounds(min: number, max: number): number {
+  if (min >= max) return min;
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
 export function* runTournament(
   strategies: Strategy[],
-  roundsPerMatch: number
+  roundsMin: number,
+  roundsMax: number = roundsMin
 ): Generator<TournamentStep> {
   const pairs: [number, number][] = [];
   for (let i = 0; i < strategies.length; i++) {
@@ -20,7 +26,8 @@ export function* runTournament(
 
   for (let idx = 0; idx < pairs.length; idx++) {
     const [i, j] = pairs[idx];
-    const match = runMatch(strategies[i], strategies[j], roundsPerMatch);
+    const rounds = randomRounds(roundsMin, roundsMax);
+    const match = runMatch(strategies[i], strategies[j], rounds);
     yield {
       matchIndex: idx,
       totalMatches: pairs.length,
@@ -74,10 +81,11 @@ export function computeStandings(
 
 export function runTournamentFull(
   strategies: Strategy[],
-  roundsPerMatch: number
+  roundsMin: number,
+  roundsMax: number = roundsMin
 ): TournamentResult {
   const matches: MatchResult[] = [];
-  for (const step of runTournament(strategies, roundsPerMatch)) {
+  for (const step of runTournament(strategies, roundsMin, roundsMax)) {
     matches.push(step.match);
   }
   return {

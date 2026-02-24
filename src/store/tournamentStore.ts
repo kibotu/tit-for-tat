@@ -10,7 +10,8 @@ interface TournamentState {
   matches: MatchResult[];
   standings: StrategyStanding[];
   status: SimulationStatus;
-  roundsPerMatch: number;
+  roundsMin: number;
+  roundsMax: number;
   speed: number; // ms delay between match steps
   currentMatchIndex: number;
   totalMatches: number;
@@ -24,7 +25,7 @@ interface TournamentState {
   setUserCode: (code: string) => void;
   setUserName: (name: string) => void;
   setCompileError: (error: string | null) => void;
-  setRoundsPerMatch: (rounds: number) => void;
+  setRoundsRange: (min: number, max: number) => void;
   setSpeed: (speed: number) => void;
   setUserStrategy: (strategy: Strategy) => void;
   startSimulation: () => void;
@@ -38,9 +39,11 @@ interface TournamentState {
 
 const DEFAULT_CODE = `// Return "C" to cooperate or "D" to defect
 function play({ mine, theirs, round }) {
-  // Tit for Tat: cooperate first, then mirror
   if (theirs.length === 0) return "C";
-  return theirs[theirs.length - 1];
+  for (let i = 0; i < theirs.length; i++) {
+    if (theirs[i] === "D") return "D";
+  }
+  return "C";
 }`;
 
 export const useTournamentStore = create<TournamentState>((set, get) => ({
@@ -48,7 +51,8 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   matches: [],
   standings: [],
   status: "idle",
-  roundsPerMatch: 200,
+  roundsMin: 100,
+  roundsMax: 300,
   speed: 100,
   currentMatchIndex: 0,
   totalMatches: 0,
@@ -59,7 +63,7 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
   setUserCode: (code) => set({ userCode: code }),
   setUserName: (name) => set({ userName: name }),
   setCompileError: (error) => set({ compileError: error }),
-  setRoundsPerMatch: (rounds) => set({ roundsPerMatch: rounds }),
+  setRoundsRange: (min, max) => set({ roundsMin: min, roundsMax: max }),
   setSpeed: (speed) => set({ speed }),
 
   setUserStrategy: (strategy) => {
@@ -85,9 +89,9 @@ export const useTournamentStore = create<TournamentState>((set, get) => ({
     }),
 
   runInstant: () => {
-    const { strategies, roundsPerMatch } = get();
+    const { strategies, roundsMin, roundsMax } = get();
     const matches: MatchResult[] = [];
-    for (const step of runTournament(strategies, roundsPerMatch)) {
+    for (const step of runTournament(strategies, roundsMin, roundsMax)) {
       matches.push(step.match);
     }
     const standings = computeStandings(strategies, matches);
@@ -120,7 +124,7 @@ export function startAnimatedSimulation() {
   const token = { cancelled: false };
   animationCancelToken = token;
 
-  const gen = runTournament(store.strategies, store.roundsPerMatch);
+  const gen = runTournament(store.strategies, store.roundsMin, store.roundsMax);
 
   const step = () => {
     if (token.cancelled) return;

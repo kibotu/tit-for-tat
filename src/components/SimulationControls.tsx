@@ -11,12 +11,13 @@ import { compileUserStrategy } from "@/engine/compile";
 
 export function SimulationControls() {
   const status = useTournamentStore((s) => s.status);
-  const roundsPerMatch = useTournamentStore((s) => s.roundsPerMatch);
+  const roundsMin = useTournamentStore((s) => s.roundsMin);
+  const roundsMax = useTournamentStore((s) => s.roundsMax);
   const speed = useTournamentStore((s) => s.speed);
   const currentMatchIndex = useTournamentStore((s) => s.currentMatchIndex);
   const totalMatches = useTournamentStore((s) => s.totalMatches);
 
-  const setRoundsPerMatch = useTournamentStore((s) => s.setRoundsPerMatch);
+  const setRoundsRange = useTournamentStore((s) => s.setRoundsRange);
   const setSpeed = useTournamentStore((s) => s.setSpeed);
   const pauseSimulation = useTournamentStore((s) => s.pauseSimulation);
   const resumeSimulation = useTournamentStore((s) => s.resumeSimulation);
@@ -54,16 +55,21 @@ export function SimulationControls() {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>Rounds per match</span>
-            <span className="font-mono text-foreground">{roundsPerMatch}</span>
+            <span className="font-mono text-foreground">
+              {roundsMin === roundsMax ? roundsMin : `${roundsMin}–${roundsMax}`}
+            </span>
           </div>
           <Slider
-            value={[roundsPerMatch]}
-            onValueChange={([v]) => setRoundsPerMatch(v)}
+            value={[roundsMin, roundsMax]}
+            onValueChange={([min, max]) => setRoundsRange(min, max)}
             min={10}
             max={500}
             step={10}
             disabled={!isConfigurable}
           />
+          <p className="text-[10px] text-muted-foreground">
+            Each match gets a random round count in this range
+          </p>
         </div>
 
         <div className="space-y-2">

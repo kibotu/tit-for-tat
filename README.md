@@ -51,12 +51,24 @@ It won because it is:
 - **Forgiving** — returns to cooperation as soon as the opponent does.
 - **Clear** — easy for opponents to understand and adapt to.
 
-## Challenger Strategies
+## Strategies
 
-Each folder contains a README with explanation, pros/cons, simulation data, and a
-**copy-paste ready** `function play(...)` for the strategy editor.
+Each folder contains a README with explanation, head-to-head results, pros/cons,
+and a **copy-paste ready** `function play(...)` for the strategy editor.
 
-### The winner
+### Built-in strategies
+
+| Rank | Strategy | Score | Type | Folder |
+| --- | --- | --- | --- | --- |
+| #1 | **Grudger** | ~3188 | Cooperate until betrayed, then defect forever | [`strategies/grudger`](strategies/grudger) |
+| #2 | **Tit for Tat** | ~3052 | Mirror opponent's last move | [`strategies/tit-for-tat`](strategies/tit-for-tat) |
+| #3 | **Tit for Two Tats** | ~2966 | Retaliate after 2 consecutive defections | [`strategies/tit-for-two-tats`](strategies/tit-for-two-tats) |
+| #4 | **Pavlov** | ~2949 | Win-Stay, Lose-Shift | [`strategies/pavlov`](strategies/pavlov) |
+| #5 | **Always Defect** | ~2809 | Defect unconditionally | [`strategies/always-defect`](strategies/always-defect) |
+| #6 | **Always Cooperate** | ~2696 | Cooperate unconditionally | [`strategies/always-cooperate`](strategies/always-cooperate) |
+| #7 | **Random** | ~2545 | 50/50 coin flip | [`strategies/random`](strategies/random) |
+
+### Challenger: the winner
 
 | Strategy | Beats Grudger? | Approach | Folder |
 | --- | --- | --- | --- |
